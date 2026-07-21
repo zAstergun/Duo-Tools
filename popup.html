@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Duo Tools</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Cabeçalho com Ícone -->
+    <header class="app__header">
+      <div class="mark" aria-hidden="true">
+        <img src="icons/icon48.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px;" alt="Duo Tools" />
+      </div>
+      <div class="app__title">
+        <h1>Duo Tools</h1>
+        <p data-i18n="popup_subtitle" class="app__subtitle">Gerenciar extensão</p>
+      </div>
+      <div class="lang-selector">
+        <span data-lang="pt-BR" class="lang-flag active" title="Português">🇧🇷</span>
+        <span data-lang="en-US" class="lang-flag" title="English">🇺🇸</span>
+        <span data-lang="es-ES" class="lang-flag" title="Español">🇪🇸</span>
+        <span data-lang="fr-FR" class="lang-flag" title="Français">🇫🇷</span>
+        <span data-lang="ru-RU" class="lang-flag" title="Русский">🇷🇺</span>
+        <span data-lang="hi-IN" class="lang-flag" title="हिन्दी">🇮🇳</span>
+        <span data-lang="ar-SA" class="lang-flag" title="العربية">🇸🇦</span>
+        <span data-lang="zh-CN" class="lang-flag" title="中文">🇨🇳</span>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="card__body">
+        <div class="card__row">
+          <span class="card__label" data-i18n="popup_show_widget">Mostrar ícone na página</span>
+          <label class="switch">
+            <input type="checkbox" id="widgetToggle" />
+            <span class="switch__track"><span class="switch__thumb"></span></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card__body">
+        <div class="card__row">
+          <span class="card__label" data-i18n="popup_reload">Recarregar página</span>
+          <button class="btn-ghost" id="btnRefresh" data-i18n="popup_btn_refresh">🔄 Refresh</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="app__footer">
+      <button class="btn-cafe" id="btnCafe" data-i18n="btn_coffee">☕ Me pague um café</button>
+      <div class="made-by">
+        <span data-i18n="made_by">Feito por</span> <a href="https://github.com/zAstergun" target="_blank" class="aster-link">Aster</a>
+        <a href="https://github.com/zAstergun" target="_blank" class="github-icon" title="GitHub">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-1.14-3.975-1.395-.3-.765-1.155-1.425-1.755-1.71-.51-.225-1.245-.615-.015-.63 1.155-.015 1.98.975 2.265 1.44 1.32 2.205 3.465 1.575 4.305 1.2.135-.96.525-1.575.96-1.935-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.54.465 1.02 1.395 1.02 2.805 0 2.025-.015 3.645-.015 4.14 0 .33.225.69.84.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+      </div>
+    </footer>
+  </div>
+  <script src="i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+/* ── Design tokens ── */
+:root {
+  --bg: #121317;
+  --card: #1b1d22;
+  --card-border: #262932;
+  --text: #edeef1;
+  --text-muted: #8b8d98;
+  --amber: #f2a93b;
+  --gold: #f59e0b;
+  --gold-soft: rgba(245, 158, 11, 0.14);
+  --rose: #fb7185;
+  --rose-soft: rgba(251, 113, 133, 0.14);
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  width: 320px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  font-size: 13.5px;
+}
+
+.app { 
+  padding: 12px; 
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+}
+
+/* ── Cabeçalho ── */
+.app__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 2px;
+}
+
+.mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #1b1d22;
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.app__title h1 {
+  font-size: 14.5px;
+  margin: 0;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.app__subtitle {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin: 2px 0 0;
+}
+
+.lang-selector {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+  background: var(--card-border);
+  padding: 4px;
+  border-radius: 8px;
+  flex-wrap: wrap;
+  width: 90px;
+  justify-content: center;
+}
+.lang-flag {
+  cursor: pointer;
+  font-size: 12px;
+  opacity: 0.4;
+  transition: opacity 0.2s, transform 0.2s;
+  user-select: none;
+}
+.lang-flag:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+.lang-flag.active {
+  opacity: 1;
+}
+
+/* ── Card ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.card__body { flex: 1; min-width: 0; }
+
+.card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card__label { font-weight: 600; font-size: 13.5px; }
+
+/* ── Toggle switch ── */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.switch__track {
+  position: absolute;
+  inset: 0;
+  background: #2b2e36;
+  border-radius: 999px;
+  transition: background 0.18s ease;
+  cursor: pointer;
+}
+.switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #cfd1d8;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.switch input:checked + .switch__track { background: var(--gold); }
+.switch input:checked + .switch__track .switch__thumb {
+  transform: translateX(16px);
+  background: #1a0b0d;
+}
+
+/* ── Botões ── */
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.btn-ghost:hover { border-color: var(--rose); color: var(--rose); background: var(--rose-soft); }
+.btn-ghost:active { transform: translateY(1px); }
+
+/* ── Rodapé ── */
+.app__footer {
+  padding-top: 4px;
+}
+
+.btn-cafe {
+  width: 100%;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--gold);
+  padding: 8px 0;
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.btn-cafe:hover {
+  background: var(--gold-soft);
+  border-color: var(--gold);
+}
+.btn-cafe:active { transform: translateY(1px); }
+
+/* ── Assinatura ── */
+.made-by {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.aster-link {
+  color: #1cb0f6;
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.15s ease;
+}
+
+.aster-link:hover {
+  color: #1899d6;
+}
+
+.github-icon {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s ease;
+}
+
+.github-icon:hover {
+  color: #fff;
+}
