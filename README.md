@@ -2,6 +2,8 @@
 
 Farm de XP · Modo Super · Resolver exercícios
 
+![Duo Tools](images/readme1.png)
+
 ## Como instalar
 
 1. Abra o Chrome e navegue para `chrome://extensions`
@@ -14,6 +16,8 @@ Farm de XP · Modo Super · Resolver exercícios
 
 ### ⚡ Farm de XP
 
+![Farm de XP](images/farmxp.png)
+
 - Define quantos XP quer ganhar e clica em **Iniciar**
 - Barra de progresso em tempo real
 - Checkbox "Pontos bônus" habilita enableBonusPoints na API
@@ -21,11 +25,15 @@ Farm de XP · Modo Super · Resolver exercícios
 
 ### ♾️ Modo Super
 
+![Modo Super](images/supermode.png)
+
 - Toggle simples On/Off
 - Intercepta e patcha os chunks JS do Duolingo para ativar `hasPlus: true` e `gold_subscription`
 - Remove limitações de corações e anúncios
 
 ### 🤖 Resolver exercício
+
+![Resolver exercício](images/solveexercise.png)
 
 - **Botão "Resolver"**: resolve a questão atual sem avançar
 - **Toggle "Resolver e pular"**: quando ativado, o botão resolve e pula em loop contínuo
@@ -33,6 +41,8 @@ Farm de XP · Modo Super · Resolver exercícios
 - Hotkeys: `Ctrl+Enter` = resolver+pular, `Alt+Enter` = só resolver, `Alt+S` = pular fala
 
 ### 🪟 Widget Flutuante In-Page
+
+![Widget Flutuante](images/widget.png)
 
 - Interface integrada diretamente na página do Duolingo (canto inferior direito)
 - Acesso rápido a todas as funções sem precisar abrir o popup da extensão
