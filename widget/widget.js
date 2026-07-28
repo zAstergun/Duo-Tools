@@ -202,6 +202,7 @@ function updateStatusLine() {
   if (superToggle && superToggle.checked) tags.push(lang['tag_super'] || 'Super');
   if (skillPathToggle && skillPathToggle.checked) tags.push(lang['tag_map'] || 'Botões no Mapa');
   if (bonusToggle && bonusToggle.checked) tags.push(lang['tag_bonus'] || 'Bônus XP');
+  if (seqSectionToggle && seqSectionToggle.checked) tags.push(lang['tag_finish_section'] || 'Finalizar seção');
   if (window.seqIsRunning) tags.push(lang['tag_seq'] || 'Sequência');
   
   if (typeof solveLoopActive !== 'undefined' && solveLoopActive) {
@@ -535,6 +536,7 @@ function setSeqStatus(text, type = '') {
 if (seqSectionToggle) {
   seqSectionToggle.addEventListener('change', async () => {
     updateSeqSectionUI();
+    updateStatusLine();
     const finishSection = !!seqSectionToggle.checked;
     const target = finishSection ? 999 : parseInt(seqDesejado?.value || 3, 10);
     const cfg = {

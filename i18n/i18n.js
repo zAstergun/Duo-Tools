@@ -45,7 +45,8 @@ const i18n = {
     'seq_legendary': 'Nível Titã',
     'seq_finish_section': 'Finalizar seção',
     'btn_start_seq': 'Iniciar agora',
-    'tag_seq': 'Sequência'
+    'tag_seq': 'Sequência',
+    'tag_finish_section': 'Finalizar seção'
   },
   'en-US': {
     'loading': 'loading…',
@@ -93,7 +94,8 @@ const i18n = {
     'seq_legendary': 'Legendary level',
     'seq_finish_section': 'Finish section',
     'btn_start_seq': 'Start now',
-    'tag_seq': 'Sequence'
+    'tag_seq': 'Sequence',
+    'tag_finish_section': 'Finish section'
   },
   'es-ES': {
     'loading': 'cargando…',
@@ -141,7 +143,8 @@ const i18n = {
     'seq_legendary': 'Nivel Titán',
     'seq_finish_section': 'Finalizar sección',
     'btn_start_seq': 'Iniciar ahora',
-    'tag_seq': 'Secuencia'
+    'tag_seq': 'Secuencia',
+    'tag_finish_section': 'Finalizar sección'
   },
   'zh-CN': {
     'loading': '加载中…',
@@ -189,7 +192,8 @@ const i18n = {
     'seq_legendary': '传奇等级',
     'seq_finish_section': '完成本单元',
     'btn_start_seq': '立即开始',
-    'tag_seq': '连续答题'
+    'tag_seq': '连续答题',
+    'tag_finish_section': '完成本单元'
   },
   'hi-IN': {
     'loading': 'लोड हो रहा है…',
@@ -237,7 +241,8 @@ const i18n = {
     'seq_legendary': 'लेजेंड्री स्तर',
     'seq_finish_section': 'अनुभाग पूरा करें',
     'btn_start_seq': 'अभी शुरू करें',
-    'tag_seq': 'सीक्वेंस'
+    'tag_seq': 'सीक्वेंस',
+    'tag_finish_section': 'अनुभाग पूरा करें'
   },
   'fr-FR': {
     'loading': 'chargement…',
@@ -285,7 +290,8 @@ const i18n = {
     'seq_legendary': 'Niveau Légendaire',
     'seq_finish_section': 'Terminer section',
     'btn_start_seq': 'Démarrer',
-    'tag_seq': 'Séquence'
+    'tag_seq': 'Séquence',
+    'tag_finish_section': 'Terminer section'
   },
   'ar-SA': {
     'loading': 'جاري التحميل…',
@@ -333,7 +339,8 @@ const i18n = {
     'seq_legendary': 'مستوى أسطوري',
     'seq_finish_section': 'إنهاء القسم',
     'btn_start_seq': 'ابدأ الآن',
-    'tag_seq': 'تسلسل'
+    'tag_seq': 'تسلسل',
+    'tag_finish_section': 'إنهاء القسم'
   },
   'ru-RU': {
     'loading': 'загрузка…',
@@ -381,6 +388,7 @@ const i18n = {
     'seq_legendary': 'Уровень Легенда',
     'seq_finish_section': 'Завершить раздел',
     'btn_start_seq': 'Начать сейчас',
-    'tag_seq': 'Автосерия'
+    'tag_seq': 'Автосерия',
+    'tag_finish_section': 'Завершить раздел'
   }
 };
