@@ -44,6 +44,14 @@ function applyLanguage(lang, saveToStorage = true) {
   if (typeof updateStatusLine === 'function' && statusLine) {
     updateStatusLine();
   }
+
+  // Atualiza instantaneamente as labels do progresso da Sequência Automática e Status se o idioma mudar
+  if (window.lastSeqProgress && typeof showSeqProgress === 'function') {
+    showSeqProgress(window.lastSeqProgress.current, window.lastSeqProgress.total);
+  }
+  if (window.lastSeqStatus && typeof setSeqStatus === 'function') {
+    setSeqStatus(window.lastSeqStatus.text, window.lastSeqStatus.type, window.lastSeqStatus.key, window.lastSeqStatus.args);
+  }
 }
 
 document.querySelectorAll('.lang-flag').forEach(flag => {
@@ -178,14 +186,14 @@ async function load() {
       window.seqIsRunning = true;
       setSeqRunningUI(true);
       showSeqProgress(lsSeq.autoSeqState.current || 0, lsSeq.autoSeqState.target || desTarget);
-      if (lsSeq.autoSeqState.statusText) {
-        setSeqStatus(lsSeq.autoSeqState.statusText, lsSeq.autoSeqState.statusType || '');
+      if (lsSeq.autoSeqState.statusText !== undefined || lsSeq.autoSeqState.statusKey !== undefined) {
+        setSeqStatus(lsSeq.autoSeqState.statusText || '', lsSeq.autoSeqState.statusType || '', lsSeq.autoSeqState.statusKey || '', lsSeq.autoSeqState.statusArgs || []);
       }
     } else {
       window.seqIsRunning = false;
       setSeqRunningUI(false);
-      if (lsSeq.autoSeqState?.statusText) {
-        setSeqStatus(lsSeq.autoSeqState.statusText, lsSeq.autoSeqState.statusType || '');
+      if (lsSeq.autoSeqState?.statusText !== undefined || lsSeq.autoSeqState?.statusKey !== undefined) {
+        setSeqStatus(lsSeq.autoSeqState.statusText || '', lsSeq.autoSeqState.statusType || '', lsSeq.autoSeqState.statusKey || '', lsSeq.autoSeqState.statusArgs || []);
       }
     }
 
@@ -323,8 +331,8 @@ chrome.storage.onChanged.addListener((changes, area) => {
       // Use target from state, fallback to the current input value (never show 0 / 3 if user set 4)
       const displayTarget = (st.target && st.target > 0) ? st.target : parseInt(seqDesejado?.value || 3, 10);
       showSeqProgress(st.current || 0, displayTarget);
-      if (st.statusText !== undefined) {
-        setSeqStatus(st.statusText, st.statusType || '');
+      if (st.statusText !== undefined || st.statusKey !== undefined) {
+        setSeqStatus(st.statusText || '', st.statusType || '', st.statusKey || '', st.statusArgs || []);
       }
     }
   }
@@ -513,24 +521,42 @@ function setSeqRunningUI(running) {
   }
 }
 
+function formatSeqMessage(key, defaultText = '', args = []) {
+  if (!key || typeof i18n === 'undefined') return defaultText;
+  const dict = i18n[currentLang] || i18n['pt-BR'] || {};
+  let text = dict[key] || defaultText;
+  if (Array.isArray(args)) {
+    args.forEach((val, index) => {
+      text = text.replace(`{${index}}`, val);
+    });
+  }
+  return text;
+}
+
 function showSeqProgress(current, total) {
   if (!seqProgress) return;
+  window.lastSeqProgress = { current, total };
+  const dict = i18n[currentLang] || i18n['pt-BR'] || {};
   if (total >= 999 || (seqSectionToggle && seqSectionToggle.checked)) {
     if (seqProgressBar) seqProgressBar.style.width = '100%';
-    if (seqProgressLabel) seqProgressLabel.textContent = `${current} lições (Até o fim da seção)`;
+    const lbl = dict['seq_prog_until_end'] || '{0} lições (Até o fim da seção)';
+    if (seqProgressLabel) seqProgressLabel.textContent = lbl.replace('{0}', current);
   } else {
     const pct = total > 0 ? Math.min(100, Math.round((current / total) * 100)) : 0;
     if (seqProgressBar) seqProgressBar.style.width = pct + '%';
-    if (seqProgressLabel) seqProgressLabel.textContent = `${current} / ${total} Lições`;
+    const lbl = dict['seq_prog_lessons'] || '{0} / {1} Lições';
+    if (seqProgressLabel) seqProgressLabel.textContent = lbl.replace('{0}', current).replace('{1}', total);
   }
   seqProgress.style.display = 'flex';
 }
 
-function setSeqStatus(text, type = '') {
+function setSeqStatus(text, type = '', key = '', args = []) {
   if (!seqStatus) return;
-  seqStatus.textContent = text;
+  window.lastSeqStatus = { text, type, key, args };
+  const displayText = key ? formatSeqMessage(key, text, args) : text;
+  seqStatus.textContent = displayText;
   seqStatus.className = 'xp-status' + (type ? ' xp-status--' + type : '');
-  seqStatus.style.display = text ? '' : 'none';
+  seqStatus.style.display = displayText ? '' : 'none';
 }
 
 if (seqSectionToggle) {
@@ -625,7 +651,7 @@ if (seqStartBtn) {
     try {
       await chrome.storage.local.set({
         autoSeqConfig: { enabled: true, target, legendary, finishSection },
-        autoSeqState: { isRunning: true, current: 0, target, legendary, finishSection, completed: false, statusText: finishSection ? "⚡ Buscando até o fim da seção..." : "⚡ Buscando próxima lição...", statusType: "" }
+        autoSeqState: { isRunning: true, current: 0, target, legendary, finishSection, completed: false, statusText: finishSection ? "⚡ Buscando até o fim da seção..." : "⚡ Buscando próxima lição...", statusKey: finishSection ? "seq_stat_searching_section" : "seq_stat_searching", statusArgs: [], statusType: "" }
       });
     } catch (e) {}
 
@@ -633,7 +659,7 @@ if (seqStartBtn) {
     updateStatusLine();
     setSeqRunningUI(true);
     showSeqProgress(0, target);
-    setSeqStatus(finishSection ? "⚡ Buscando até o fim da seção..." : "⚡ Buscando próxima lição...", "");
+    setSeqStatus(finishSection ? "⚡ Buscando até o fim da seção..." : "⚡ Buscando próxima lição...", "", finishSection ? "seq_stat_searching_section" : "seq_stat_searching", []);
 
     window.parent?.postMessage({ type: 'START_AUTO_SEQUENCE', target, legendary, finishSection }, '*');
     chrome.runtime.sendMessage({ action: 'start_auto_sequence', target, legendary, finishSection }).catch(() => {});
@@ -649,13 +675,13 @@ if (seqStopBtn) {
     try {
       await chrome.storage.local.set({
         autoSeqConfig: { enabled: false, target, finishSection, legendary: !!seqLegendaryToggle.checked },
-        autoSeqState: { isRunning: false, current: 0, target, finishSection, legendary: !!seqLegendaryToggle.checked, statusText: "🛑 Sequência parada pelo usuário.", statusType: "" }
+        autoSeqState: { isRunning: false, current: 0, target, finishSection, legendary: !!seqLegendaryToggle.checked, statusText: "🛑 Sequência parada pelo usuário.", statusKey: "seq_stat_stopped", statusArgs: [], statusType: "" }
       });
       updateStatusLine();
     } catch (e) {}
 
     setSeqRunningUI(false);
-    setSeqStatus("🛑 Sequência parada pelo usuário.", "");
+    setSeqStatus("🛑 Sequência parada pelo usuário.", "", "seq_stat_stopped", []);
     window.parent?.postMessage({ type: 'STOP_AUTO_SEQUENCE' }, '*');
     chrome.runtime.sendMessage({ action: 'stop_auto_sequence' }).catch(() => {});
   });

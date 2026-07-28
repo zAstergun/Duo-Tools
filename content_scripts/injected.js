@@ -92,14 +92,26 @@ setInterval(() => {
                 initialCurrent = 0;
             }
             const stText = window.auto_seq_config.finishSection ? `⚡ Solucionando até o fim da seção (${initialCurrent + 1}ª)...` : `⚡ Solucionando lição ${initialCurrent + 1}/${currentTarget}...`;
-            updateAutoSeqState({ isRunning: true, current: initialCurrent, target: currentTarget, legendary: !!window.auto_seq_config.legendary, finishSection: !!window.auto_seq_config.finishSection, completed: false, statusText: stText, statusType: "" });
+            const stKey = window.auto_seq_config.finishSection ? "seq_stat_solving_section" : "seq_stat_solving";
+            const stArgs = window.auto_seq_config.finishSection ? [initialCurrent + 1] : [initialCurrent + 1, currentTarget];
+            updateAutoSeqState({ isRunning: true, current: initialCurrent, target: currentTarget, legendary: !!window.auto_seq_config.legendary, finishSection: !!window.auto_seq_config.finishSection, completed: false, statusText: stText, statusKey: stKey, statusArgs: stArgs, statusType: "" });
         }
         
         if (window.autolingo?.solving || window.autolingo?.active_click_next) return;
         const challenge = new DuolingoChallenge();
-        if (challenge.proactive_speech_skip()) return;
+        if (challenge.proactive_speech_skip()) {
+            challenge.click_next();
+            return;
+        }
         if (challenge.solve_story()) return;
         if (!challenge.challenge_internals) {
+            challenge.click_next();
+            return;
+        }
+        // Pula exercícios de fala pelo tipo do challenge (quando o botão ainda não apareceu no DOM)
+        const ct = window.autolingo?.challenge_type || '';
+        if (ct && (ct.toLowerCase().includes('speak') || ct.toLowerCase().includes('speech'))) {
+            challenge.skip_speak();
             challenge.click_next();
             return;
         }
@@ -131,6 +143,12 @@ const inject = (extension_id) => {
         const challenge = new DuolingoChallenge();
         
         if (challenge.solve_story()) return;
+
+        // Verifica se é exercício de fala antes de tentar resolver
+        if (challenge.proactive_speech_skip()) {
+            // Exercício de fala pulado: não tenta resolver, não avança (ação manual)
+            return;
+        }
 
         if (!challenge.challenge_internals) return; // Aguarda carregar
         
@@ -415,7 +433,7 @@ function scheduleNextLessonInSequence() {
         if (!targetNode) {
             if (attempts > 25) {
                 clearInterval(findNextInterval);
-                updateAutoSeqState({ isRunning: false, completed: true, statusText: "🛑 Mapa da seção não encontrado.", statusType: "error" });
+                updateAutoSeqState({ isRunning: false, completed: true, statusText: "🛑 Mapa da seção não encontrado.", statusKey: "seq_stat_err_map", statusArgs: [], statusType: "error" });
                 window.auto_seq_config.enabled = false;
             }
             return;
@@ -441,7 +459,7 @@ function scheduleNextLessonInSequence() {
 
         if (validNodes.length === 0) {
             window.auto_seq_config.enabled = false;
-            updateAutoSeqState({ isRunning: false, completed: true, statusText: "🛑 Nenhuma lição disponível na seção.", statusType: "error" });
+            updateAutoSeqState({ isRunning: false, completed: true, statusText: "🛑 Nenhuma lição disponível na seção.", statusKey: "seq_stat_err_empty", statusArgs: [], statusType: "error" });
             return;
         }
 
@@ -472,15 +490,18 @@ function scheduleNextLessonInSequence() {
         if (!targetLesson) {
             window.log("[Duo Tools] Última lição da seção alcançada. Não há mais lições disponíveis na seção atual.");
             const finishMsg = window.auto_seq_config.finishSection ? "🏆 Toda a seção foi concluída com sucesso!" : "🛑 Fim da seção alcançado! Sequência encerrada.";
+            const finishKey = window.auto_seq_config.finishSection ? "seq_stat_section_finished" : "seq_stat_section_end";
             window.auto_seq_config.enabled = false;
-            updateAutoSeqState({ isRunning: false, completed: true, statusText: finishMsg, statusType: "success" });
+            updateAutoSeqState({ isRunning: false, completed: true, statusText: finishMsg, statusKey: finishKey, statusArgs: [], statusType: "success" });
             return;
         }
 
         // 6. Clicar e iniciar a próxima lição
         window.log(`[Duo Tools] Abrindo lição em sequência (${isLegendaryAttempt ? "Titã" : "Normal"})...`);
         const progressText = window.auto_seq_config.finishSection ? `⚡ Abrindo próxima lição (Até o fim da seção)...` : `⚡ Abrindo lição ${window.auto_seq_state.current + 1} de ${window.auto_seq_state.target}...`;
-        updateAutoSeqState({ isRunning: true, statusText: progressText, statusType: "" });
+        const progKey = window.auto_seq_config.finishSection ? "seq_stat_opening_section" : "seq_stat_opening";
+        const progArgs = window.auto_seq_config.finishSection ? [] : [window.auto_seq_state.current + 1, window.auto_seq_state.target];
+        updateAutoSeqState({ isRunning: true, statusText: progressText, statusKey: progKey, statusArgs: progArgs, statusType: "" });
         
         const lessonType = targetLesson.meta.type === "story" ? "story" : "lesson";
         const ds = new DuolingoSkill(targetLesson.node, lessonType);
@@ -498,7 +519,7 @@ document.addEventListener("start_auto_sequence", (e) => {
     const target = finishSection ? 999 : parseInt(data.target || window.auto_seq_config.target || 3, 10);
     const legendary = data.legendary !== undefined ? !!data.legendary : !!window.auto_seq_config.legendary;
     window.auto_seq_config = { enabled: true, target, legendary, finishSection };
-    updateAutoSeqState({ isRunning: true, current: 0, target, legendary, finishSection, completed: false, statusText: finishSection ? "⚡ Buscando até o fim da seção..." : "⚡ Buscando próxima lição...", statusType: "" });
+    updateAutoSeqState({ isRunning: true, current: 0, target, legendary, finishSection, completed: false, statusText: finishSection ? "⚡ Buscando até o fim da seção..." : "⚡ Buscando próxima lição...", statusKey: finishSection ? "seq_stat_searching_section" : "seq_stat_searching", statusArgs: [], statusType: "" });
     window.log("[Duo Tools] Sequência automática iniciada via comando! Meta:", target, "Titã:", legendary, "Finalizar Seção:", finishSection);
     
     const currentUrl = document.location.href;
@@ -510,7 +531,7 @@ document.addEventListener("start_auto_sequence", (e) => {
 
 document.addEventListener("stop_auto_sequence", () => {
     window.auto_seq_config.enabled = false;
-    updateAutoSeqState({ isRunning: false, current: 0, completed: false, statusText: "🛑 Sequência parada pelo usuário.", statusType: "" });
+    updateAutoSeqState({ isRunning: false, current: 0, completed: false, statusText: "🛑 Sequência parada pelo usuário.", statusKey: "seq_stat_stopped", statusArgs: [], statusType: "" });
     window.log("[Duo Tools] Sequência automática cancelada.");
 });
 
@@ -548,12 +569,14 @@ document.addEventListener("lesson_completed_transition", () => {
     if (!window.auto_seq_config.finishSection && window.auto_seq_state.current >= currentTarget) {
         window.log(`[Duo Tools] Sequência concluída com sucesso! (${window.auto_seq_state.current}/${currentTarget})`);
         window.auto_seq_config.enabled = false;
-        updateAutoSeqState({ isRunning: false, completed: true, statusText: `✅ Sequência de ${currentTarget} lições finalizada!`, statusType: "success" });
+        updateAutoSeqState({ isRunning: false, completed: true, statusText: `✅ Sequência de ${currentTarget} lições finalizada!`, statusKey: "seq_stat_finished", statusArgs: [currentTarget], statusType: "success" });
         return;
     }
 
     const nextStatus = window.auto_seq_config.finishSection ? `⚡ Concluído ${window.auto_seq_state.current} lições! Buscando próxima na seção...` : `⚡ Concluído ${window.auto_seq_state.current}/${currentTarget}! Preparando próxima lição...`;
-    updateAutoSeqState({ isRunning: true, statusText: nextStatus, statusType: "" });
+    const nextKey = window.auto_seq_config.finishSection ? "seq_stat_next_section" : "seq_stat_next";
+    const nextArgs = window.auto_seq_config.finishSection ? [window.auto_seq_state.current] : [window.auto_seq_state.current, currentTarget];
+    updateAutoSeqState({ isRunning: true, statusText: nextStatus, statusKey: nextKey, statusArgs: nextArgs, statusType: "" });
     scheduleNextLessonInSequence();
 });
 
