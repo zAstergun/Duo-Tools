@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Glow effect outer -->
+  <circle cx="24" cy="24" r="23" fill="none" stroke="#f59e0b" stroke-width="3" opacity="0.3"/>
+  <!-- Background circle -->
+  <circle cx="24" cy="24" r="21" fill="#1b1d22" stroke="#f59e0b" stroke-width="2"/>
+  <!-- Amber glow ring -->
+  <circle cx="24" cy="24" r="21" fill="none" stroke="#fcd34d" stroke-width="1" opacity="0.6"/>
+  <!-- Owl body -->
+  <ellipse cx="24" cy="28" rx="10" ry="10" fill="#f59e0b"/>
+  <!-- Owl belly -->
+  <ellipse cx="24" cy="31" rx="6" ry="6.5" fill="#fde68a"/>
+  <!-- Left eye -->
+  <circle cx="20" cy="23" r="4" fill="#1b1d22"/>
+  <circle cx="20" cy="23" r="2.5" fill="#fff"/>
+  <circle cx="20.8" cy="22.5" r="1.2" fill="#1b1d22"/>
+  <!-- Right eye -->
+  <circle cx="28" cy="23" r="4" fill="#1b1d22"/>
+  <circle cx="28" cy="23" r="2.5" fill="#fff"/>
+  <circle cx="28.8" cy="22.5" r="1.2" fill="#1b1d22"/>
+  <!-- Beak -->
+  <polygon points="24,26 22,28 26,28" fill="#d97706"/>
+  <!-- Left ear tuft -->
+  <polygon points="17,18 15,12 20,16" fill="#f59e0b"/>
+  <!-- Right ear tuft -->
+  <polygon points="31,18 33,12 28,16" fill="#f59e0b"/>
+  <!-- Wings -->
+  <ellipse cx="14.5" cy="31" rx="4" ry="7" fill="#d97706" transform="rotate(-15 14.5 31)"/>
+  <ellipse cx="33.5" cy="31" rx="4" ry="7" fill="#d97706" transform="rotate(15 33.5 31)"/>
+  <!-- Crown / star (legendary) -->
+  <polygon points="24,5 25.5,9.5 30,9.5 26.5,12 27.8,16.5 24,14 20.2,16.5 21.5,12 18,9.5 22.5,9.5" fill="#fcd34d" stroke="#f59e0b" stroke-width="0.5"/>
+</svg>

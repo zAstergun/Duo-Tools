@@ -1,0 +1,83 @@
+{
+  "manifest_version": 3,
+  "name": "Duo Tools",
+  "version": "1.0.0",
+  "description": "Farm de XP, Modo Super, resolver exercícios — tudo numa extensão só. | XP Farming, Super Mode, Auto-Solve — all in one extension.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs",
+    "contextMenus",
+    "notifications",
+    "alarms",
+    "cookies"
+  ],
+  "host_permissions": [
+    "*://*.duolingo.com/*",
+    "*://duolingo.com/*",
+    "*://d35aaqx5ub95lt.cloudfront.net/*",
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.duolingo.com/*",
+        "*://duolingo.com/*",
+        "*://d35aaqx5ub95lt.cloudfront.net/*"
+      ],
+      "js": ["content-script.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://*.duolingo.com/*",
+        "*://duolingo.com/*",
+        "*://d35aaqx5ub95lt.cloudfront.net/*"
+      ],
+      "js": ["page-patch.js"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/*",
+        "images/*",
+        "content_scripts/injected.js",
+        "content_scripts/DuolingoChallenge.js",
+        "content_scripts/DuolingoSkill.js",
+        "content_scripts/ReactUtils.js",
+        "content_scripts/main.css",
+        "widget/widget.html",
+        "widget/widget.css",
+        "widget/widget.js",
+        "i18n/i18n.js"
+      ],
+      "matches": [
+        "*://*.duolingo.com/*",
+        "*://duolingo.com/*",
+        "*://d35aaqx5ub95lt.cloudfront.net/*"
+      ]
+    }
+  ]
+}
